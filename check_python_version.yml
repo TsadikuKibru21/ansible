@@ -1,0 +1,19 @@
+---
+- hosts: servers
+  tasks:
+    - name: Check Python version
+      command: python3 --version
+      register: python_version
+      ignore_errors: yes
+
+    - name: Report Python version
+      debug:
+        msg: >
+          The installed Python version on {{ inventory_hostname }} is: {{ python_version.stdout }}.
+      when: python_version.rc == 0
+
+    - name: Report Python not installed
+      debug:
+        msg: >
+          Python is not installed on {{ inventory_hostname }}.
+      when: python_version.rc != 0
