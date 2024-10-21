@@ -1,0 +1,19 @@
+---
+- hosts: servers
+  tasks:
+    - name: Check if Nginx is installed
+      command: nginx -v
+      register: nginx_installed
+      ignore_errors: yes
+
+    - name: Report Nginx installation status
+      debug:
+        msg: >
+          Nginx is installed on {{ inventory_hostname }}.
+      when: nginx_installed.rc == 0
+
+    - name: Report Nginx not installed
+      debug:
+        msg: >
+          Nginx is not installed on {{ inventory_hostname }}.
+      when: nginx_installed.rc != 0
