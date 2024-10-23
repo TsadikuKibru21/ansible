@@ -1,0 +1,19 @@
+---
+- hosts: servers
+  tasks:
+    - name: Check pip version
+      command: pip3 --version
+      register: pip_version
+      ignore_errors: yes
+
+    - name: Report pip version
+      debug:
+        msg: >
+          The installed pip version on {{ inventory_hostname }} is: {{ pip_version.stdout }}.
+      when: pip_version.rc == 0
+
+    - name: Report pip not installed
+      debug:
+        msg: >
+          pip is not installed on {{ inventory_hostname }}.
+      when: pip_version.rc != 0
